@@ -54,10 +54,19 @@ describe('lazy-bouncer routes', () => {
     const me = await agent.get('/api/v1/users/me');
 
     expect(me.body).toEqual({
-      ...user.toJSON(),
+      ...user,
       exp: expect.any(Number),
       iat: expect.any(Number),
     });
+
+    // expect(me.body).toEqual({
+    //   id: user.id,
+    //   firstName: user.firstName,
+    //   lastName: user.lastName,
+    //   email: user.email,
+    //   exp: expect.any(Number),
+    //   iat: expect.any(Number),
+    // });
   });
 
   it('should return a 401 when signed out and listing all users', async () => {
@@ -71,6 +80,7 @@ describe('lazy-bouncer routes', () => {
 
   it('should return a 403 when signed in but not admin and listing all users', async () => {
     const [agent] = await registerAndLogin();
+
     const res = await agent.get('/api/v1/users');
 
     expect(res.body).toEqual({
@@ -83,6 +93,6 @@ describe('lazy-bouncer routes', () => {
     const [agent, user] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users');
 
-    expect(res.body).toEqual([user.toJSON()]);
+    expect(res.body).toEqual([{ ...user }]);
   });
 });
