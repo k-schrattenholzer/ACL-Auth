@@ -49,7 +49,7 @@ describe('lazy-bouncer routes', () => {
     });
   });
 
-  it.only('returns the current user', async () => {
+  it('returns the current user', async () => {
     const [agent, user] = await registerAndLogin();
     const me = await agent.get('/api/v1/users/me');
 
@@ -58,7 +58,7 @@ describe('lazy-bouncer routes', () => {
       exp: expect.any(Number),
       iat: expect.any(Number),
     });
-    
+
     // expect(me.body).toEqual({
     //   id: user.id,
     //   firstName: user.firstName,
@@ -92,6 +92,6 @@ describe('lazy-bouncer routes', () => {
     const [agent, user] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users');
 
-    expect(res.body).toEqual([user.toJSON()]);
+    expect(res.body).toEqual([{ ...user }]);
   });
 });
